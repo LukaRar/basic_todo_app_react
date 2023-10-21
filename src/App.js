@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
 
-function App() {
+export default function App() {
+  const [list, setList] = useState([]);
+  const [input, setInput] = useState("");
+
+  function addTodo(todo) {
+    const newTodo = {
+      id: Math.random(),
+      todo: todo,
+    };
+    // add the todo to the list
+    setList([...list, newTodo]);
+
+    //clear input field
+    setInput("");
+  }
+  function deleteTodo(id) {
+    const newList = list.filter((todo) => todo.id !== id);
+    setList(newList);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Todo List</h1>
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={() => addTodo(input)}>Add</button>
+      <ul>
+        {list.map((todo) => (
+          <li key={todo.id}>
+            {todo.todo}
+            <button onClick={() => deleteTodo(todo.id)}>&times;</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
-
-export default App;
